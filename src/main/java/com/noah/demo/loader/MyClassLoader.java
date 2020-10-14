@@ -1,6 +1,5 @@
 package com.noah.demo.loader;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +18,7 @@ public class MyClassLoader extends ClassLoader {
 
 
     // 定义默认的class存放路径
-    private static final Path DEFAULT_CLASS_DIR = Paths.get("/User", "classloader");
+    private static final Path DEFAULT_CLASS_DIR = Paths.get("/Users/yinzongchang", "classloader");
 
     private final Path classDir;
 
@@ -62,6 +61,7 @@ public class MyClassLoader extends ClassLoader {
         String classPath = name.replace(".", "/");
 
         Path classFullPath = classDir.resolve(Paths.get(classPath + ".class"));
+
         if (!classFullPath.toFile().exists()) {
             throw new ClassNotFoundException("The class " + name + " not found.");
         }
