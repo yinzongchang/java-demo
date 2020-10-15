@@ -7,36 +7,98 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Title: MyClassLoader.java <br>
+ * Title: BrokerDelegateClassLoader.java <br>
  * Description:             <br>
  * Copyright: Copyright (c) 2015<br>
+ * Company: 北京云杉世界信息技术有限公司<br>
  *
- * @author yinzo 2020/10/10
+ * @author yinzo 2020/10/14
  */
-// 自定义类加载器必须是ClassLoader的直接或者间接子类
-public class MyClassLoader extends ClassLoader {
-
+public class BrokerDelegateClassLoader extends ClassLoader {
 
     // 定义默认的class存放路径
     private static final Path DEFAULT_CLASS_DIR = Paths.get("/Users/yinzongchang", "classloader");
 
     private final Path classDir;
 
-    public MyClassLoader() {
+    public BrokerDelegateClassLoader() {
         super();
         this.classDir = DEFAULT_CLASS_DIR;
     }
 
-    public MyClassLoader(String classDir) {
+    public BrokerDelegateClassLoader(String classDir) {
 
         super();
         this.classDir = Paths.get(classDir);
     }
 
-    public MyClassLoader(String classDir, ClassLoader parentClassLoader) {
+    public BrokerDelegateClassLoader(String classDir, ClassLoader parentClassLoader) {
 
         super(parentClassLoader);
         this.classDir = Paths.get(classDir);
+    }
+
+
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+
+        // 1.
+        synchronized (getClassLoadingLock(name)) {
+
+            // 2
+            Class<?> klass = findLoadedClass(name);
+
+            // 3
+            if (klass == null) {
+
+                // 4.
+                if (name.startsWith("java.") || name.startsWith("javax")) {
+
+                    try {
+                        klass = getSystemClassLoader().loadClass(name);
+                    } catch (Exception e) {
+
+                        // ignore
+                    }
+
+                } else {
+
+                    // 5
+                    try {
+                        klass = this.findClass(name);
+                    } catch (Exception e) {
+                        // ignore
+                    }
+
+                    // 6
+                    if (klass == null) {
+
+                        if (getParent() != null) {
+
+                            klass = getParent().loadClass(name);
+                        } else {
+
+                            klass = getSystemClassLoader().loadClass(name);
+                        }
+                    }
+
+                }
+            }
+
+            // 7
+            if (null == klass) {
+
+                throw new ClassNotFoundException("The class " + name + " not found.");
+            }
+
+            if (resolve) {
+
+                resolveClass(klass);
+            }
+
+            return klass;
+        }
+
     }
 
     // 重写父类的findClass
@@ -58,7 +120,7 @@ public class MyClassLoader extends ClassLoader {
     @Override
     public String toString() {
 
-        return "My ClassLoader";
+        return "BrokerDelegate ClassLoader";
     }
 
     private byte[] readClassBytes(String name) throws ClassNotFoundException {
