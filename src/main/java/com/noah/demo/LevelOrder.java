@@ -42,17 +42,27 @@ public class LevelOrder {
 
             List<Integer> levelList = new ArrayList<>();
 
+            result.add(levelList);
+
             for (int i = 0; i < levelSize; i++) {
 
+                TreeNode treeNode = levelNode.poll();
+                levelList.add(treeNode.val);
 
+                if (treeNode.left != null) {
+                    levelNode.offer(treeNode.left);
+                }
+
+                if (treeNode.right != null) {
+                    levelNode.offer(treeNode.right);
+                }
 
             }
 
 
         }
 
-
-        return null;
+        return result;
     }
 
 }
