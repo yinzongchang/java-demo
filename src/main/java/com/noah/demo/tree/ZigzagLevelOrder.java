@@ -1,4 +1,4 @@
-package com.noah.demo;
+package com.noah.demo.tree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * Title: LevelOrderBottom.java <br>
+ * Title: ZigzagLevelOrder.java <br>
  * Description:             <br>
  * Copyright: Copyright (c) 2015<br>
  *
  * @author yinzo 2020/11/20
  */
-public class LevelOrderBottom {
+public class ZigzagLevelOrder {
 
 
-    // Definition for a binary tree node.
-    public class TreeNode {
+    public static class TreeNode {
         int val;
         TreeNode left;
         TreeNode right;
@@ -26,10 +25,10 @@ public class LevelOrderBottom {
         }
     }
 
-    public List<List<Integer>> levelOrderBottom(TreeNode root) {
 
-        // 定义最外层集合
-        List<List<Integer>> levelOrderList = new LinkedList<>();
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+
+        List<List<Integer>> levelOrderList = new ArrayList<>();
 
         if (root == null) {
 
@@ -39,15 +38,23 @@ public class LevelOrderBottom {
         Queue<TreeNode> levelNodeQueue = new LinkedList<>();
         levelNodeQueue.offer(root);
 
+        boolean order = true;
+
         while (!levelNodeQueue.isEmpty()) {
 
-            int levelSize = levelNodeQueue.size();
 
-            List<Integer> levelList = new ArrayList<>();
-            for (int i = 0; i < levelSize; i++) {
+            int size = levelNodeQueue.size();
+
+            List<Integer> levelList = new LinkedList<>();
+            for (int i = 0; i < size; i++) {
 
                 TreeNode node = levelNodeQueue.poll();
-                levelList.add(node.val);
+
+                if (order) {
+                    levelList.add(node.val);
+                } else {
+                    levelList.add(0, node.val);
+                }
 
                 if (node.left != null) {
                     levelNodeQueue.offer(node.left);
@@ -57,11 +64,9 @@ public class LevelOrderBottom {
                 }
             }
 
-            levelOrderList.add(0, levelList);
+            levelOrderList.add(levelList);
+            order = !order;
         }
-
         return levelOrderList;
     }
-
-
 }

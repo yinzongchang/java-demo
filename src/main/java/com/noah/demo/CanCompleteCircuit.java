@@ -19,13 +19,12 @@ public class CanCompleteCircuit {
         System.out.println(canCompleteCircuit1(gas, cost));
         System.out.println(canCompleteCircuit2(gas, cost));
         System.out.println(canCompleteCircuit3(gas, cost));
-
-
     }
 
 
     /**
      * 全部遍历了一遍
+     *
      * @param gas
      * @param cost
      * @return
@@ -128,12 +127,7 @@ public class CanCompleteCircuit {
         } else {
             return -1;
         }
-
-
-
     }
-
-
 
 
 }
