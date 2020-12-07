@@ -1,5 +1,7 @@
 package com.noah.demo.loader;
 
+import java.util.Arrays;
+
 /**
  * Title: HelloWorld.java <br>
  * Description:             <br>
@@ -7,7 +9,7 @@ package com.noah.demo.loader;
  *
  * @author yinzo 2020/10/13
  */
-public class HelloWorld {
+public class HelloWorld implements IHelloWorld {
 
     static {
         System.out.println("Hello world class is initialized.");
@@ -20,6 +22,8 @@ public class HelloWorld {
 
     public static void main(String[] args) {
 
+
+        System.out.println(Arrays.toString(HelloWorld.class.getInterfaces()));
 
     }
 

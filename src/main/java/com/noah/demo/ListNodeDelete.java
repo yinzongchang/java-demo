@@ -12,7 +12,6 @@ public class ListNodeDelete {
 
     public ListNode deleteDuplicates(ListNode head) {
 
-
         // 链表为空
         if (head == null) {
 
@@ -46,6 +45,43 @@ public class ListNodeDelete {
             head.next = deleteDuplicates(next);
             return head;
         }
+    }
+
+    public ListNode deleteDuplicates2(ListNode head) {
+
+        if (head == null) {
+
+            return head;
+        }
+
+        ListNode next = head.next;
+
+        if (next == null) {
+            return head;
+        }
+
+
+        if (head.val == next.val) {
+
+            while (head.val == next.val) {
+
+                head = next;
+                next = next.next;
+
+                // 若下一个指针为空，就跳出循环
+                if (next == null) {
+                    break;
+                }
+            }
+
+            return deleteDuplicates2(next);
+        } else {
+
+            head.next = deleteDuplicates2(next);
+            return head;
+        }
+
+
     }
 
 

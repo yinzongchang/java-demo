@@ -1,4 +1,4 @@
-package com.noah.demo;
+package com.noah.demo.tree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
